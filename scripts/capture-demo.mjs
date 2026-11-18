@@ -1,0 +1,18 @@
+import { chromium } from '@playwright/test'
+import { mkdirSync } from 'node:fs'
+mkdirSync('docs/demo', { recursive: true })
+const browser = await chromium.launch()
+const context = await browser.newContext({ viewport: { width: 1200, height: 800 }, recordVideo: { dir: 'docs/demo', size: { width: 1200, height: 800 } } })
+const page = await context.newPage()
+await page.goto('http://127.0.0.1:4177')
+await page.evaluate(() => document.fonts.ready)
+await page.waitForTimeout(1200)
+await page.getByLabel('Expression input').fill('10 choose 3')
+await page.getByLabel('Expression input').press('Enter')
+await page.waitForTimeout(1600)
+await page.getByRole('tab', { name: 'graph', exact: true }).click()
+await page.waitForTimeout(1800)
+await page.getByRole('tab', { name: 'matrix', exact: true }).click()
+await page.waitForTimeout(1800)
+await context.close()
+await browser.close()

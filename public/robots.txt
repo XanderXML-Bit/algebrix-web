@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://algebrix.zendren.net/sitemap.xml
