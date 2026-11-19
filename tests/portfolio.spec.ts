@@ -55,6 +55,10 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 1440, height: 900 
     const response = await page.goto('/this-does-not-exist')
     expect(response?.status()).toBe(404)
     await expect(page.getByRole('heading', { name: "That page isn't here." })).toBeVisible()
+    const footer = page.locator('footer')
+    await expect(footer).toHaveText(`© ${new Date().getFullYear()} Zendren · Calculator privacy · Privacy · Terms`)
+    await expect(footer.getByRole('link', { name: 'Zendren', exact: true })).toHaveAttribute('href', 'https://zendren.net')
+    await expect(footer.getByRole('link', { name: 'Privacy', exact: true })).toHaveAttribute('href', 'https://zendren.net/privacy')
     await page.screenshot({ path: testInfo.outputPath(`404-${viewport.width}.png`), fullPage: true })
   })
 }

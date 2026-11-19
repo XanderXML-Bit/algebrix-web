@@ -32,13 +32,24 @@ test('desktop hero keeps "all-in-one" on one line at 1440x900', async ({ page })
   expect(lines).toBe(1)
 })
 
+test('the calculator footer and privacy section identify Zendren', async ({ page }) => {
+  await page.goto('/')
+  const footer = page.locator('footer')
+  await expect(footer).toHaveText(`© ${new Date().getFullYear()} Zendren · Calculator privacy · Privacy · Terms`)
+  await expect(footer.getByRole('link', { name: 'Zendren', exact: true })).toHaveAttribute('href', 'https://zendren.net')
+  await expect(footer.getByRole('link', { name: 'Privacy', exact: true })).toHaveAttribute('href', 'https://zendren.net/privacy')
+  const privacy = page.locator('#privacy')
+  await expect(privacy).toContainText('Zendren LLC operates this site.')
+  await expect(privacy.getByRole('link', { name: 'hello@zendren.net' })).toHaveAttribute('href', 'mailto:hello@zendren.net')
+})
+
 for (const width of [320, 768, 1280]) {
   test(`header and footer links are 44px touch targets without overflow at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 800 })
     await page.goto('/')
     const boxes = await page.locator('nav.topbar a, footer a').evaluateAll((els) =>
       els.map((el) => { const r = el.getBoundingClientRect(); return { text: el.textContent, w: r.width, h: r.height } }))
-    expect(boxes.length).toBe(8)
+    expect(boxes.length).toBe(7)
     for (const box of boxes) {
       expect(box.h, `${box.text} height`).toBeGreaterThanOrEqual(44)
       expect(box.w, `${box.text} width`).toBeGreaterThanOrEqual(24)
@@ -46,10 +57,10 @@ for (const width of [320, 768, 1280]) {
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)
     expect(overflow).toBeLessThanOrEqual(0)
     if (width === 320) {
-      // Footer links must keep the 2-line wrap; extra link padding once pushed it to 3 lines.
+      // Keep the footer within two lines at the smallest supported width.
       const rows = await page.locator('footer a').evaluateAll((els) =>
         new Set(els.map((el) => Math.round(el.getBoundingClientRect().top))).size)
-      expect(rows, 'footer link rows at 320px').toBe(2)
+      expect(rows, 'footer link rows at 320px').toBeLessThanOrEqual(2)
     }
   })
 }

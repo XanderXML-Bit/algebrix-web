@@ -75,7 +75,7 @@ The inputs are editable examples, not simulated AI results. No login or purchase
 
 ## Privacy
 
-History uses browser localStorage, not a remote calculation service. Storage failures leave calculations working for the current visit. No app analytics, accounts or tracking cookies are implemented. Hosting still processes request metadata. The site's Privacy section explains processors, deletion and contact options.
+History uses browser localStorage, not a remote calculation service. Storage failures leave calculations working for the current visit. No app analytics, accounts or tracking cookies are implemented. Hosting still processes request metadata. The site's Privacy section explains processors and deletion. Zendren LLC operates the calculator. Email [hello@zendren.net](mailto:hello@zendren.net) for privacy requests.
 
 ## Recreating the evidence
 

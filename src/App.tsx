@@ -478,9 +478,9 @@ export default function App() {
     <section id="privacy" className="privacy module-shell" aria-labelledby="privacy-title">
       <h2 id="privacy-title">Privacy</h2>
       <p>Expressions and results are saved in localStorage on this device (up to 24 calculations); they are not sent to a calculator server. Use Clear history to delete them, or clear this site's browser data. No accounts, tracking cookies, or app analytics are used. Fonts are served with the site.</p>
-      <p>Vercel hosts the site and processes request metadata, such as IP address and browser information, to deliver and secure it. See <a href="https://vercel.com/legal/privacy-policy">Vercel's privacy policy</a>. For privacy requests, use the contact options at <a href="https://zendren.net">Zendren</a>; hosting-record requests are subject to the host's retention policy.</p>
+      <p>Vercel hosts the site and processes request metadata, such as IP address and browser information, to deliver and secure it. See <a href="https://vercel.com/legal/privacy-policy">Vercel's privacy policy</a>. Zendren LLC operates this site. For privacy requests, email <a href="mailto:hello@zendren.net">hello@zendren.net</a>. Hosting-record requests follow Vercel's retention policy.</p>
     </section>
-    <footer>© {new Date().getFullYear()} <a href="https://zendren.net">Zendren</a> · Built by <a href="https://xandermlopez.com" rel="author">Xander M. Lopez</a> · <a href="#privacy">Calculator privacy</a> · <a href="https://zendren.net/privacy">Privacy</a> · <a href="https://zendren.net/terms">Terms</a></footer>
+    <footer>© {new Date().getFullYear()} <a href="https://zendren.net">Zendren</a> · <a href="#privacy">Calculator privacy</a> · <a href="https://zendren.net/privacy">Privacy</a> · <a href="https://zendren.net/terms">Terms</a></footer>
   </main>
   </>
 }
