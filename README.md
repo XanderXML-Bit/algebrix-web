@@ -1,8 +1,10 @@
 # Algebrix Web
 
-A browser calculator for scientific expressions, algebra helpers, graphs, matrices, statistics, finance and unit conversions.
+A browser calculator for students and anyone working through scientific expressions, equations, or everyday conversions.
 
-**Live:** [algebrix.zendren.net](https://algebrix.zendren.net). It is free and needs no login. The Vercel alias [algebrix-eight.vercel.app](https://algebrix-eight.vercel.app) serves the same build. Canonical and share tags point to algebrix.zendren.net.
+[![CI status on main](https://github.com/XanderXML-Bit/algebrix-web/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/XanderXML-Bit/algebrix-web/actions/workflows/ci.yml)
+
+[Open the live calculator](https://algebrix.zendren.net).
 
 ![Algebrix calculator with a scientific expression and local history](docs/screenshots/calculator.png)
 
@@ -10,77 +12,88 @@ A browser calculator for scientific expressions, algebra helpers, graphs, matric
 
 ## Demo
 
-![Recorded walkthrough: combinations, graph and matrix modules](docs/demo/calculator.gif)
+![Walkthrough of a combination calculation and the Graph and Matrix tabs](docs/demo/calculator.gif)
 
-This is a recording of the real production build, not a mockup. Enter `10 choose 3` and press Enter to get `120`; select Graph or Matrix to explore the other modules. The live calculator requires no login.
+The screenshots and walkthrough show this repository's calculator. Enter `10 choose 3` and press Enter to get `120`. Select Graph or Matrix to try the other tools shown in the walkthrough.
 
-## Modules
+## What it does
 
 | Module | What it supports |
 |---|---|
-| Scientific | Arithmetic, powers, parentheses, constants, trig, factorial, combinations and permutations; degrees/radians, precision and exact fractions |
-| Algebra and calculus helpers | Examples using `factor`, `solve`, `derivative`, `integral` and `limit`; explicit errors for unsupported expressions |
-| Graph | Canvas plot and trace for expressions in x; visible x/y range −6 to 6 |
-| Matrix | Determinant, inverse and reduced row echelon form |
+| Scientific | Arithmetic, powers, parentheses, constants, trigonometry, factorials, combinations, and permutations. Settings for angle units, display precision, and exact fractions. |
+| Algebra and calculus | Quadratic factoring, polynomial equations in `x`, derivatives, definite integrals, and limits through typed commands. |
+| Graph | Canvas plot and trace slider for functions of `x`, with both axes fixed from `-6` to `6`. |
+| Matrix | Determinant, inverse, and reduced row echelon form |
 | Statistics | One-variable summary statistics and linear regression |
-| Finance and units | Future value and length, mass and temperature conversions |
-| History | Up to 24 recent expressions/results stored on this device; Clear history deletes them |
+| Finance and units | Future value and length, mass, and temperature conversions |
+| History | Up to 24 recent expressions and results saved in the browser |
 
-Algebrix Web complements the **Algebrix TI-84 Plus CE engine (CalcEngine)**. They are one product story with independent implementations: this site does not emulate TI hardware or promise full engine parity. Verify important results independently.
+Algebrix Web runs independently of the Algebrix TI-84 Plus CE engine.
 
 ## Stack
 
-React 19, TypeScript 6 and Vite 8; mathjs for numerical operations and nerdamer for symbolic helpers. Vitest/Testing Library cover calculation logic and UI; Playwright and axe-core cover browser flows, assets, keyboard input and accessibility. Fonts are bundled locally.
+React 19, TypeScript 6, and Vite 8. The calculator uses mathjs for expression evaluation, Nerdamer for symbolic helpers, and decimal.js for high-precision approximations.
 
-**Brand:** Studio family; primary blue `#6ba8ff`, teal `#7bd2c2`; Sora display, Manrope body and IBM Plex Mono. Design tokens are in `src/styles.css`. Brand SVGs are in `public/brand/`.
+The Studio palette uses blue `#6ba8ff` and teal `#7bd2c2`. The build bundles Sora, Manrope, and IBM Plex Mono. See [`src/styles.css`](src/styles.css) and [`public/brand/`](public/brand/).
 
-## Setup and development
+## Architecture
 
-Use Node **22.23.3** (`.nvmrc` and `package.json`), then:
+[`src/App.tsx`](src/App.tsx) renders the panels and manages browser storage. In [`src/lib/`](src/lib/), `router.ts` dispatches input to `calculator.ts` for evaluation, `cas.ts` for symbolic commands, or `solve.ts` for equation solving. `format.ts` controls display precision. `toolkits.ts` implements matrix, statistics, finance, and conversion operations.
+
+With exact mode on, `calculator.ts` uses mathjs `Fraction` values for arithmetic with integers and division, such as `1/3 + 1/6`. `solve.ts` converts decimal coefficients to exact fractions and keeps powers of `pi` and `e` symbolic during polynomial construction.
+
+## Quick start
+
+Install Node.js `22.23.3`, the version pinned in [`.nvmrc`](.nvmrc). Run these commands from the repository root.
 
 ```bash
 npm ci
 npm run dev
 ```
 
-Open the local URL printed by Vite. For validation:
+Open the local URL printed by Vite.
+
+## Tests
 
 ```bash
-npm run check                     # lint, unit tests, TypeScript and production build
-npx playwright install chromium   # install the browser once
-npm run e2e                       # builds and serves dist on 127.0.0.1:4177
+npm run check
+npx playwright install chromium
+npm run e2e
 ```
 
-Linux may require `npx playwright install-deps chromium` (system administrator privileges). The GitHub Actions workflow in `.github/workflows/ci.yml` runs the same checks on pushes and pull requests.
+`npm run check` runs ESLint, the Vitest suite, and the production build, which includes the TypeScript check. Vitest and Testing Library cover calculation logic and React interactions.
 
-## Production artifact
+`npm run e2e` builds and serves `dist/` on port `4177`. Playwright checks calculator flows, keyboard input, assets, and the 404 page. It runs axe-core on the calculator panels at mobile and desktop widths.
+
+On Linux, install Chromium and its system dependencies with `npx playwright install --with-deps chromium`. The [CI workflow](.github/workflows/ci.yml) runs the checks on pushes and pull requests.
+
+## Serve the production build
 
 ```bash
 npm run build
 node scripts/serve-dist.mjs
 ```
 
-The latter command serves the production artifact locally on port 4177 with real HTTP 404 responses. `npm run preview` is a Vite convenience server and does not reproduce the hosting 404 rule. Vercel uses `npm ci`, `npm run build` and `dist/`, with filesystem routing followed by the styled `404.html`.
+Open `http://127.0.0.1:4177`. The local server mirrors the routing in [`vercel.json`](vercel.json) and returns the styled `404.html` with HTTP status `404` for missing paths.
 
-## Configuration and free operation
+## Configuration
 
-| Setting | Value |
-|---|---|
-| Environment variables | None; see `.env.example` |
-| Backend / paid API / AI key | None; calculations run locally |
-| Storage | Browser localStorage, up to 24 history entries |
-| Hosting | Vercel Hobby (free) static project; no paid feature required |
-
-The inputs are editable examples, not simulated AI results. No login or purchase is required. Nothing is simulated, so the app shows no demo banner. The hero states that history stays in this browser.
+The calculator runs in the browser without a backend, account, or environment variables. See [`.env.example`](.env.example).
 
 ## Privacy
 
-History uses browser localStorage, not a remote calculation service. Storage failures leave calculations working for the current visit. No app analytics, accounts or tracking cookies are implemented. Hosting still processes request metadata. The site's Privacy section explains processors and deletion. Zendren LLC operates the calculator. Email [hello@zendren.net](mailto:hello@zendren.net) for privacy requests.
+The app saves history in `localStorage` and the current expression in `sessionStorage`. Select Clear history and confirm to remove saved history. Clear the site's browser data to remove both. Calculations still work if browser storage is unavailable.
 
-## Recreating the evidence
+The calculator has no app analytics or tracking cookies. The site's Privacy section describes the request metadata that the host processes. Zendren LLC operates the calculator. Send privacy requests to [hello@zendren.net](mailto:hello@zendren.net).
 
-With the production-artifact server running, `node scripts/capture-demo.mjs` records the walkthrough (requires Playwright Chromium). Convert its WebM output to the committed GIF with FFmpeg. `node scripts/lighthouse.mjs` runs a mobile Lighthouse audit using the Linux Playwright browser; the Lighthouse CLI is downloaded by npx. The social card can be regenerated with `python3 scripts/create-share-image.py` (Pillow with WOFF2 font support).
+## Recreate the evidence
+
+Start the production server and install Playwright Chromium before recording the demo or running Lighthouse.
+
+- Run `node scripts/capture-demo.mjs` to record the walkthrough as a WebM in `docs/demo/`. Convert the recording to a GIF with FFmpeg.
+- Run `node scripts/lighthouse.mjs` to audit performance and accessibility. The script runs Lighthouse through `npx`.
+- Run `python3 scripts/create-share-image.py` to regenerate the social card. The script requires Pillow with WOFF2 font support.
 
 ## License
 
-All rights reserved. See [LICENSE](LICENSE). No open-source reuse license is granted.
+All rights reserved. See [LICENSE](LICENSE). Third-party dependencies and fonts retain their respective licenses.
