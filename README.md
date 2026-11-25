@@ -4,17 +4,19 @@ A browser calculator for students and anyone working through scientific expressi
 
 [![CI status on main](https://github.com/XanderXML-Bit/algebrix-web/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/XanderXML-Bit/algebrix-web/actions/workflows/ci.yml)
 
-[Open the live calculator](https://algebrix.zendren.net).
+[Open the current hosted Algebrix calculator](https://algebrix.zendren.net).
 
-![Algebrix calculator with a scientific expression and local history](docs/screenshots/calculator.png)
-
-![Algebrix mobile calculator](docs/screenshots/calculator-mobile.png)
+This checkout contains the public build shown in the walkthrough and screenshots below.
 
 ## Demo
 
 ![Walkthrough of a combination calculation and the Graph and Matrix tabs](docs/demo/calculator.gif)
 
-The screenshots and walkthrough show this repository's calculator. Enter `10 choose 3` and press Enter to get `120`. Select Graph or Matrix to try the other tools shown in the walkthrough.
+Enter `10 choose 3` and press Enter to get `120`. Select Graph or Matrix to try the other tools shown in the walkthrough.
+
+![Algebrix calculator with a scientific expression and local history](docs/screenshots/calculator.png)
+
+![Algebrix mobile calculator](docs/screenshots/calculator-mobile.png)
 
 ## What it does
 
